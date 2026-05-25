@@ -17,9 +17,10 @@ from .LLMProviderUI import LLMProviderInterface
 from .LLMChatUI import LLMChatInterface
 from sys import platform
 import PeakDeskSprite.settings as settings
+from PeakDeskSprite.resource_paths import package_path, resource_path
 basedir = settings.BASEDIR
 
-module_path = os.path.join(basedir, 'PeakDeskSprite/SpriteSettings/')
+module_path = package_path('SpriteSettings')
 
 
 class ControlMainWindow(FluentWindow):
@@ -50,13 +51,13 @@ class ControlMainWindow(FluentWindow):
                              FIF.SAVE, #QIcon(os.path.join(module_path, 'resource/saveIcon.svg')), 
                              self.tr('Game Save'))
         self.addSubInterface(self.charCardInterface,
-                             QIcon(os.path.join(basedir, "res/icons/system/character.svg")),
+                             QIcon(resource_path("res", "icons", "system", "character.svg")),
                              self.tr('Characters'))
         self.addSubInterface(self.itemCardInterface,
-                             QIcon(os.path.join(basedir, "res/icons/system/itemMod.svg")),
+                             QIcon(resource_path("res", "icons", "system", "itemMod.svg")),
                              self.tr('Item MOD'))
         self.addSubInterface(self.petCardInterface,
-                             QIcon(os.path.join(basedir, "res/icons/system/minipet.svg")),
+                             QIcon(resource_path("res", "icons", "system", "minipet.svg")),
                              self.tr('Mini-Pets'))
 
 
@@ -65,7 +66,7 @@ class ControlMainWindow(FluentWindow):
     def initWindow(self):
         #self.setMinimumSize(minWidth, minHeight)
         #self.resize(1000, 800)
-        self.setWindowIcon(QIcon(os.path.join(basedir, "res/icons/SystemPanel.png")))
+        self.setWindowIcon(QIcon(resource_path("res", "icons", "SystemPanel.png")))
         self.setWindowTitle(self.tr('System'))
 
         desktop = QApplication.primaryScreen().availableGeometry() #QApplication.desktop().availableGeometry()
@@ -74,12 +75,17 @@ class ControlMainWindow(FluentWindow):
 
     def show_window(self):
         if self.isVisible():
-            self.hide()
+            if self.isMinimized():
+                self.showNormal()
         else:
-            self.show()
+            self.showNormal()
+        self.raise_()
+        self.activateWindow()
 
     def show_llm_provider(self):
-        self.show()
+        self.showNormal()
+        self.raise_()
+        self.activateWindow()
         self.switchTo(self.llmProviderInterface)
 
     def closeEvent(self, event):

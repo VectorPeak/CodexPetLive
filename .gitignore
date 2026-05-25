@@ -4,6 +4,8 @@ venv/
 PeakDeskSprite.spec
 builddmg.sh
 __pycache__/
+**/__pycache__/
+*.pyc
 PeakDeskSprite/__pycache__/
 PeakDeskSprite/SpriteSettings/__pycache__/
 PeakDeskSprite/Dashboard/__pycache__/
@@ -11,6 +13,12 @@ data/
 logs/
 dist/
 build/
+release-work/
+*.env
+.env
+.env.*
+**/llm_secrets.json
+**/llm_chat_history.json
 run_PeakDeskSprite.exe
 run_PeakDeskSprite.spec
 res/role/纳西妲

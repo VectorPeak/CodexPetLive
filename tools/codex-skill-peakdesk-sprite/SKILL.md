@@ -51,7 +51,7 @@ spritesheet.webp
 Command from the repo root:
 
 ```powershell
-$Skill = ".\PeakDeskSprite\peakdesk-sprite"
+$Skill = ".\tools\codex-skill-peakdesk-sprite"
 python "$Skill\scripts\hatchpet_to_peakdesk.py" convert `
   --input "D:\path\to\codex-pet-package" `
   --out-dir "res\role\BestFriendsCodex" `

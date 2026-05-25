@@ -8,6 +8,7 @@ from PySide6.QtCore import QObject, QThread, Signal, QTimer
 import PeakDeskSprite.settings as settings
 from PeakDeskSprite.llm_client import generate_bubble_reply
 basedir = settings.BASEDIR
+_NO_FALLBACK = object()
 
 """
 List of buble behavior
@@ -108,22 +109,40 @@ class BubbleManager(QObject):
     def load_bubble_config(self) -> dict:
         system_conf_file = os.path.join(basedir, 'res/icons/bubble_conf.json')
         pet_bb_conf_file = os.path.join(basedir, f'res/role/{settings.petname}/note/bubble_conf.json')
-        bubble_conf = dict(json.load(open(system_conf_file, 'r', encoding='UTF-8')))
+        bubble_conf = self._read_bubble_conf(system_conf_file)
 
         # Load any changes made in pet config
         if os.path.exists(pet_bb_conf_file):
-            pet_bb_conf = dict(json.load(open(pet_bb_conf_file, 'r', encoding='UTF-8')))
-            # Default buble type config changes
-            for k in bubble_conf.keys():
-                if k in pet_bb_conf.keys():
-                    bubble_conf[k].update(pet_bb_conf[k])
-            
-            # Any newly added bubble type in pet bubble config
-            for k in pet_bb_conf.keys():
-                if k not in bubble_conf.keys():
-                    bubble_conf[k] = self._format_bubble_type_conf(pet_bb_conf[k])
+            pet_bb_conf = self._read_bubble_conf(pet_bb_conf_file, fallback={})
+            bubble_conf = self._merge_pet_bubble_conf(bubble_conf, pet_bb_conf)
 
         return bubble_conf
+
+    def _read_bubble_conf(self, path, fallback=_NO_FALLBACK):
+        try:
+            with open(path, 'r', encoding='utf-8-sig') as f:
+                data = json.load(f)
+            if not isinstance(data, dict):
+                raise ValueError("bubble config root must be an object")
+            return data
+        except Exception:
+            if fallback is _NO_FALLBACK:
+                raise
+            return fallback
+
+    def _merge_pet_bubble_conf(self, bubble_conf, pet_bb_conf):
+        try:
+            merged_conf = {k: v.copy() for k, v in bubble_conf.items()}
+            for k, v in pet_bb_conf.items():
+                if not isinstance(v, dict):
+                    continue
+                if k in merged_conf:
+                    merged_conf[k].update(v)
+                else:
+                    merged_conf[k] = self._format_bubble_type_conf(v)
+            return merged_conf
+        except Exception:
+            return bubble_conf
     
     def _format_bubble_type_conf(self, bubble_type_conf):
         final_conf = {}

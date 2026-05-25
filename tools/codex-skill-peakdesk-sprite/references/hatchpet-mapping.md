@@ -67,8 +67,8 @@ Copy `stand_0.png` to `info/pfp.png` as the default avatar.
 After conversion:
 
 ```powershell
-python ".\PeakDeskSprite\peakdesk-sprite\scripts\validate_peakdesk_role.py" "res\role\RoleName"
-python ".\PeakDeskSprite\peakdesk-sprite\scripts\hatchpet_to_peakdesk.py" validate "res\role\RoleName"
+python ".\tools\codex-skill-peakdesk-sprite\scripts\validate_peakdesk_role.py" "res\role\RoleName"
+python ".\tools\codex-skill-peakdesk-sprite\scripts\hatchpet_to_peakdesk.py" validate "res\role\RoleName"
 ```
 
 Then run `PeakDeskSprite.conf.CheckCharFiles`. Treat all three checks as necessary: the first is stronger on assets, the second is converter-local compatibility, and the third verifies the current app code path.

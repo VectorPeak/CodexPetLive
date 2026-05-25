@@ -7,6 +7,7 @@ import uuid
 import types
 import random
 import inspect
+from collections import deque
 from typing import List
 from datetime import datetime, timedelta
 
@@ -90,6 +91,14 @@ class SpriteNote(QWidget):
         self.type_dict = {}
         self.sound_playing = []
         self.exist_bubble_types = {}
+        self._note_queue = deque()
+        self._note_queue_timer = QTimer(self)
+        self._note_queue_timer.setSingleShot(True)
+        self._note_queue_timer.timeout.connect(self._process_next_notification)
+        self._bubble_queue = deque()
+        self._bubble_queue_timer = QTimer(self)
+        self._bubble_queue_timer.setSingleShot(True)
+        self._bubble_queue_timer.timeout.connect(self._process_next_bubble)
 
         if platform == 'win32':
             self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.SubWindow)
@@ -188,10 +197,29 @@ class SpriteNote(QWidget):
 
     def setup_notification(self, note_type, message=''):
         # 排队 避免显示冲突
-        while self.note_in_prepare:
-            time.sleep(1)
+        self._note_queue.append((note_type, message))
+        self._schedule_note_queue()
 
+    def _schedule_note_queue(self):
+        if self.note_in_prepare:
+            return
+        if not self._note_queue_timer.isActive():
+            self._note_queue_timer.start(0)
+
+    def _process_next_notification(self):
+        if self.note_in_prepare or not self._note_queue:
+            return
+
+        note_type, message = self._note_queue.popleft()
         self.note_in_prepare = True
+        try:
+            self._show_notification(note_type, message)
+        finally:
+            self.note_in_prepare = False
+            if self._note_queue:
+                self._note_queue_timer.start(0)
+
+    def _show_notification(self, note_type, message=''):
 
         if note_type in self.icon_dict.keys():
             icon = self.icon_dict[note_type]['image']
@@ -206,7 +234,6 @@ class SpriteNote(QWidget):
                            self.icon_dict[i]['fv_lock']<= settings.pet_data.fv_lvl]
             #print(random_list)
             if len(random_list) == 0:
-                self.note_in_prepare = False
                 return
             else:
                 note_type_use = random.sample(random_list,1)[0]
@@ -247,8 +274,7 @@ class SpriteNote(QWidget):
         
         self.play_audio(note_type_use, note_index)
 
-        self.note_in_prepare = False
-        if bubble_dict.get('log', True) and message != '':
+        if message != '':
             self.noteToLog.emit(icon, message)
 
     def play_audio(self, note_type, note_index):
@@ -319,11 +345,29 @@ class SpriteNote(QWidget):
         return mergeable_type, merge_num, unmatched_text
     
     def setup_bubbleText(self, bubble_dict, pos_x, pos_y):
-        # 排队 避免显示冲突
-        while self.bubble_in_prepare:
-            time.sleep(1)
+        self._bubble_queue.append((bubble_dict.copy(), pos_x, pos_y))
+        self._schedule_bubble_queue()
 
+    def _schedule_bubble_queue(self):
+        if self.bubble_in_prepare:
+            return
+        if not self._bubble_queue_timer.isActive():
+            self._bubble_queue_timer.start(0)
+
+    def _process_next_bubble(self):
+        if self.bubble_in_prepare or not self._bubble_queue:
+            return
+
+        bubble_dict, pos_x, pos_y = self._bubble_queue.popleft()
         self.bubble_in_prepare = True
+        try:
+            self._show_bubbleText(bubble_dict, pos_x, pos_y)
+        finally:
+            self.bubble_in_prepare = False
+            if self._bubble_queue:
+                self._bubble_queue_timer.start(0)
+
+    def _show_bubbleText(self, bubble_dict, pos_x, pos_y):
 
         note_index = str(uuid.uuid4())
         bubble_type = bubble_dict.get('bubble_type', None)
@@ -335,7 +379,6 @@ class SpriteNote(QWidget):
         # Deduplicate each type of bubbles
         if bubble_type:
             if bubble_type in self.exist_bubble_types.keys():
-                self.bubble_in_prepare = False
                 return
             else:
                 self.exist_bubble_types[bubble_type] = note_index
@@ -388,10 +431,8 @@ class SpriteNote(QWidget):
         if sound_type:
             self.play_audio(sound_type, note_index)
 
-        if message != '':
+        if bubble_dict.get('log', True) and message != '':
             self.noteToLog.emit(icon, message)
-        
-        self.bubble_in_prepare = False
 
     def remove_bubble(self, note_index):
         self.bubble_dict.pop(note_index)

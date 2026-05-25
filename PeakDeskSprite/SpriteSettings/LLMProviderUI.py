@@ -13,6 +13,7 @@ from qfluentwidgets import (
 import PeakDeskSprite.settings as settings
 from PeakDeskSprite import app_identity
 from PeakDeskSprite.llm_client import (
+    LLMConfigError,
     PROVIDER_PRESETS,
     build_bubble_messages,
     load_secret_api_key,
@@ -49,7 +50,13 @@ class LLMTestThread(QThread):
             reply = request_chat_completion(self.config, messages)
             self.done.emit(True, reply)
         except Exception as exc:
-            self.done.emit(False, str(exc))
+            self.done.emit(False, sanitize_provider_error(exc))
+
+
+def sanitize_provider_error(exc):
+    if isinstance(exc, LLMConfigError):
+        return "大模型服务配置不完整，请检查接口地址、模型和 API 密钥。"
+    return "服务商请求失败，已隐藏敏感连接信息。"
 
 
 class LLMProviderInterface(ScrollArea):

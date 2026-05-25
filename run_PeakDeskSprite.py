@@ -4,21 +4,12 @@ import ctypes
 from tendo import singleton
 import os
 
-if getattr(sys, 'frozen', False):
-    os.chdir(os.path.dirname(sys.executable))
-
-from PeakDeskSprite.utils import read_json
-from PeakDeskSprite.PeakDeskSprite import PetWidget
-from PeakDeskSprite.Notification import SpriteNote
-from PeakDeskSprite.Accessory import SpriteAccessory
-
 from PySide6.QtWidgets import QApplication
 from PySide6 import QtCore
 from PySide6.QtCore import Qt, QLocale, QTimer, QDateTime, QDate, Signal, QTime
 
 from qfluentwidgets import  FluentTranslator, setThemeColor
-from PeakDeskSprite.SpriteSettings.SpriteControlPanel import ControlMainWindow
-from PeakDeskSprite.Dashboard.DashboardUI import DashboardMainWindow
+from PeakDeskSprite.resource_paths import resource_root, set_runtime_cwd
 
 try:
     size_factor = 1 #ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100
@@ -26,6 +17,24 @@ except:
     size_factor = 1
 
 import PeakDeskSprite.settings as settings
+
+_runtime_components_loaded = False
+
+
+def _load_runtime_components():
+    global _runtime_components_loaded
+    global PetWidget, SpriteNote, SpriteAccessory, ControlMainWindow, DashboardMainWindow
+
+    if _runtime_components_loaded:
+        return
+
+    from PeakDeskSprite.PeakDeskSprite import PetWidget
+    from PeakDeskSprite.Notification import SpriteNote
+    from PeakDeskSprite.Accessory import SpriteAccessory
+    from PeakDeskSprite.SpriteSettings.SpriteControlPanel import ControlMainWindow
+    from PeakDeskSprite.Dashboard.DashboardUI import DashboardMainWindow
+
+    _runtime_components_loaded = True
 
 
 # For translation:
@@ -44,6 +53,7 @@ class PeakDeskSpriteApp(QApplication):
     date_changed = Signal(QDate)
 
     def __init__(self, *args, **kwargs):
+        _load_runtime_components()
         super(PeakDeskSpriteApp, self).__init__(*args, **kwargs)
 
         self.setQuitOnLastWindowClosed(False)
@@ -175,20 +185,18 @@ class PeakDeskSpriteApp(QApplication):
 
 
         
-
-
-if platform == 'win32':
-    basedir = ''
-else:
-    basedir = os.path.dirname(__file__)
+basedir = resource_root()
 
 def main():
+    set_runtime_cwd()
+
     # Avoid multiple process
     try:
         me = singleton.SingleInstance()
     except:
         sys.exit()
 
+    _load_runtime_components()
 
     # Create App
     QApplication.setHighDpiScaleFactorRoundingPolicy(

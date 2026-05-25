@@ -6,21 +6,16 @@ from sys import platform
 from collections import defaultdict
 
 from PySide6.QtGui import QImage, QPixmap
+import PeakDeskSprite.conf as conf
 from PeakDeskSprite.conf import PetData, TaskData, ActData, ItemData
 from PeakDeskSprite import app_identity
+from PeakDeskSprite.resource_paths import resource_root, resource_path
 from PeakDeskSprite.runtime_paths import app_config_dir, runtime_data_dir
 from PySide6 import QtCore
 
-if platform == 'win32':
-    basedir = ''
-    BASEDIR = ''
-else:
-    #from pathlib import Path
-    basedir = os.path.dirname(__file__) #Path(os.path.dirname(__file__))
-    #basedir = basedir.parent
-    basedir = basedir.replace('\\','/')
-    basedir = '/'.join(basedir.split('/')[:-1])
-    BASEDIR = basedir
+basedir = resource_root()
+BASEDIR = basedir
+conf.basedir = basedir
 
 configdir = app_config_dir()
 CONFIGDIR = configdir
@@ -103,7 +98,7 @@ RUNTIME_DATA_FILES = [
 
 def _legacy_data_dirs():
     candidates = []
-    for root in [basedir, os.getcwd()]:
+    for root in [resource_root(), os.getcwd()]:
         if root is None:
             continue
         candidates.append(os.path.abspath(os.path.join(root, 'data')))
@@ -273,10 +268,10 @@ def init():
 
     # Translations ====================================================
     global lang_dict
-    lang_dict = _read_json_file(os.path.join(basedir, 'res/language/language.json'))
+    lang_dict = _read_json_file(resource_path('res', 'language', 'language.json'))
 
     # Settings =========================================================
-    pets = get_petlist(os.path.join(basedir, 'res/role'))
+    pets = get_petlist(resource_path('res', 'role'))
     init_settings()
     global default_pet
     if default_pet not in pets:
@@ -553,7 +548,7 @@ def change_translator(language_code):
         translator = None
     else:
         translator = QtCore.QTranslator()
-        translator.load(QtCore.QLocale(language_code), "langs", ".", os.path.join(basedir, "res/language/"))
+        translator.load(QtCore.QLocale(language_code), "langs", ".", resource_path("res", "language"))
 
         global TIER_NAMES, HUNGERSTR, FAVORSTR
         TIER_NAMES = [translator.translate("others", i) for i in TIER_NAMES] #.encode('utf-8')

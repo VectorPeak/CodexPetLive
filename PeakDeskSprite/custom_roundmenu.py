@@ -240,6 +240,16 @@ class MenuActionListWidget(QListWidget):
         self._maxVisibleItems = num
         self.adjustSize()
 
+    def mouseReleaseEvent(self, e):
+        if e.button() == Qt.RightButton:
+            item = self.itemAt(e.pos())
+            if item and item.flags() & Qt.ItemIsEnabled:
+                self.itemClicked.emit(item)
+                e.accept()
+                return
+
+        super().mouseReleaseEvent(e)
+
     def maxVisibleItems(self):
         return self._maxVisibleItems
 

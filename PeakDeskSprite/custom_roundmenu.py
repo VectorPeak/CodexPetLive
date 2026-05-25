@@ -681,6 +681,16 @@ class RoundMenu(QMenu):
         if (w is not self.view) and (not self.view.isAncestorOf(w)):
             self._hideMenu(True)
 
+    def mouseReleaseEvent(self, e):
+        viewport_pos = self.view.viewport().mapFrom(self, e.pos())
+        item = self.view.itemAt(viewport_pos)
+        if item and item.flags() & Qt.ItemIsEnabled:
+            self._onItemClicked(item)
+            e.accept()
+            return
+
+        super().mouseReleaseEvent(e)
+
     def mouseMoveEvent(self, e):
         if not self.isSubMenu:
             return

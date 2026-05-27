@@ -84,7 +84,7 @@ Generate a contact sheet and optional GIF previews for generated assets. Reject:
 
 ## Runtime QA
 
-When the user asks for proof, set `data/settings.json` default role to the generated role, launch `run_PeakDeskSprite.py` with `-X faulthandler -u`, redirect stdout/stderr into `logs/`, then inspect:
+When the user asks for proof, set `data/settings.json` default role to the generated role, launch `python -X faulthandler -u -m PeakDeskSprite`, redirect stdout/stderr into `logs/`, then inspect:
 
 - process state;
 - stdout and stderr;

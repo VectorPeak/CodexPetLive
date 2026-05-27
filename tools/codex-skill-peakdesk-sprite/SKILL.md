@@ -25,7 +25,7 @@ The native app check proves the files are connected. It does not prove transpare
 
 ## Workflow
 
-1. Find the repo root. It must contain `run_PeakDeskSprite.py`, `PeakDeskSprite/`, and `res/role/`.
+1. Find the repo root. It must contain `PeakDeskSprite/__main__.py`, `PeakDeskSprite/`, and `res/role/`.
 2. Inspect the active Python environment. Install `Pillow` only if image conversion or validation needs it and it is missing.
 3. Choose a path:
    - Native role creation or repair: read `references/role-contract.md`.
@@ -103,7 +103,7 @@ New-Item -ItemType Directory -Force -Path ".\logs" | Out-Null
 $Out = ".\logs\run_$Stamp.out.log"
 $Err = ".\logs\run_$Stamp.err.log"
 Start-Process -FilePath "python" `
-  -ArgumentList "-X","faulthandler","-u","run_PeakDeskSprite.py" `
+  -ArgumentList "-X","faulthandler","-u","-m","PeakDeskSprite" `
   -WorkingDirectory (Get-Location) `
   -RedirectStandardOutput $Out `
   -RedirectStandardError $Err `

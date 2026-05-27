@@ -39,7 +39,7 @@ $PythonPath = 'C:\Path\To\Python\python.exe'
 脚本会执行：
 
 1. 清理 `release-work\dist`、`release-work\build`、`release-work\spec`。
-2. 使用 `python -m PyInstaller --clean --noconfirm` 构建 `run_PeakDeskSprite.py`。
+2. 使用 `python -m PyInstaller --clean --noconfirm` 构建 `PeakDeskSprite/__main__.py`。
 3. 将 PyInstaller 输出写入 `release-work\dist\PeakDeskSprite`。
 4. 审计未压缩发布目录。
 5. 压缩为 `release-work\PeakDeskSprite-$Version-windows-x64.zip`。
@@ -89,7 +89,7 @@ git status --short --branch
 git check-ignore -v data logs dist build release-work **/llm_secrets.json **/llm_chat_history.json
 git ls-files data logs dist build release-work
 & $PythonPath -m pip check
-& $PythonPath -m compileall PeakDeskSprite run_PeakDeskSprite.py tools scripts
+& $PythonPath -m compileall PeakDeskSprite tools scripts
 $env:QT_QPA_PLATFORM = 'offscreen'
 & $PythonPath .\scripts\smoke_resource_paths.py
 & $PythonPath .\scripts\smoke_ui_llm_bugs.py

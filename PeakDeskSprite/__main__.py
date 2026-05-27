@@ -43,10 +43,10 @@ def _load_runtime_components():
 
 # For .exe:
 # Now we use pyinstaller 6.5.0
-# pyinstaller --noconsole --icon="000.ico" --hidden-import="pynput.mouse._win32" --hidden-import="pynput.keyboard._win32" run_PeakDeskSprite.py
+# pyinstaller --noconsole --icon="000.ico" --hidden-import="pynput.mouse._win32" --hidden-import="pynput.keyboard._win32" PeakDeskSprite/__main__.py
 
 # For Mac:
-# pyinstaller --windowed --icon 000.icns --add-data="res:res" --add-data="PeakDeskSprite:PeakDeskSprite" --hidden-import="pynput.mouse._darwin" --hidden-import="pynput.keyboard._darwin" run_PeakDeskSprite.py
+# pyinstaller --windowed --icon 000.icns --add-data="res:res" --add-data="PeakDeskSprite:PeakDeskSprite" --hidden-import="pynput.mouse._darwin" --hidden-import="pynput.keyboard._darwin" PeakDeskSprite/__main__.py
 
 
 class PeakDeskSpriteApp(QApplication):

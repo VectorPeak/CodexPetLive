@@ -39,29 +39,10 @@ English | <a href="README.md">简体中文</a>
 ⭐ Please **STAR** if you like it and want to get the update!
 
 
-## Try the Demo
+## Quick Start
+
 ### Windows Users
   Download the [Release](https://github.com/VectorPeak/PeakDeskSprite/releases), unzip it, and double-click **``PeakDeskSprite.exe``**. Windows release artifacts are named **``PeakDeskSprite-vX.Y.Z-windows-x64.zip``**
-
-### Windows Terminal
-  Create a new **conda** environment 
-  ```
-  conda create --name PeakDeskSprite_pyside python=3.9.18
-  conda activate PeakDeskSprite_pyside
-  python -m pip install --upgrade pip
-  python -m pip install -r requirements.txt
-  ```
-  Download the repository，then run **``run_PeakDeskSprite.py``**.
-  
-### MacOS Users
-  Create a new **conda** environment  
-  ```
-  conda create --name PeakDeskSprite_pyside python=3.9.18
-  conda activate PeakDeskSprite_pyside
-  python -m pip install --upgrade pip
-  python -m pip install -r requirements.txt
-  ```
-  Download the repository，then run **``run_PeakDeskSprite.py``**.
 
 
 
@@ -72,7 +53,7 @@ English | <a href="README.md">简体中文</a>
 
 ## Project Structure And Public Docs
 
-- `run_PeakDeskSprite.py`: source entry point; the executable in the Release package is named `PeakDeskSprite.exe`
+- `PeakDeskSprite/__main__.py`: source entry point; the executable in the Release package is named `PeakDeskSprite.exe`
 - `PeakDeskSprite/`: PySide6 desktop pet runtime, settings panels, dashboard, notifications, LLM UI, and LLM services
 - `res/`: default roles, items, language files, and UI resources
 - `docs/`: development, release, and source-structure documentation

@@ -6,7 +6,7 @@ This file records the current import-level dependency map. It is a working refer
 
 ```text
 entry/bootstrap
-  run_PeakDeskSprite.py
+  PeakDeskSprite/__main__.py
     -> PeakDeskSprite.PeakDeskSprite
     -> PeakDeskSprite.Notification
     -> PeakDeskSprite.Accessory

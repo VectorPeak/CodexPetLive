@@ -5,7 +5,7 @@ This document records the current source dependency map and the proposed naming 
 ## Current Layers
 
 ```text
-run_PeakDeskSprite.py
+PeakDeskSprite/__main__.py
   -> PeakDeskSprite.PeakDeskSprite.PetWidget
   -> PeakDeskSprite.Notification.SpriteNote
   -> PeakDeskSprite.Accessory.SpriteAccessory
@@ -105,7 +105,7 @@ The target structure should be reached through compatibility shims, not a single
 ## Minimum Regression For Any Move
 
 ```powershell
-D:\ZXY\Dev\Miniconda3\envs\Dyber_pyside\python.exe -m compileall PeakDeskSprite run_PeakDeskSprite.py
+D:\ZXY\Dev\Miniconda3\envs\Dyber_pyside\python.exe -m compileall PeakDeskSprite
 
 @'
 from PeakDeskSprite.conf import CheckCharFiles

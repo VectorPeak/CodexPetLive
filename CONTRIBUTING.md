@@ -12,7 +12,7 @@
 
 ```powershell
 python -m pip install -r requirements.txt
-python run_PeakDeskSprite.py
+python -m PeakDeskSprite
 ```
 
 建议在 Windows 环境验证改动。涉及 UI、动画、托盘、开机自启、通知、文件路径的改动，最好说明手动验证过的场景。

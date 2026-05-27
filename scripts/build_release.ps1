@@ -17,7 +17,7 @@ $buildRoot = Join-Path $releaseRoot 'build'
 $specRoot = Join-Path $releaseRoot 'spec'
 $packageDir = Join-Path $distRoot 'PeakDeskSprite'
 $auditScript = Join-Path $scriptDir 'audit_release_package.ps1'
-$entryPoint = Join-Path $repoRoot 'run_PeakDeskSprite.py'
+$entryPoint = Join-Path $repoRoot 'PeakDeskSprite\__main__.py'
 $resourceDir = Join-Path $repoRoot 'res'
 $settingsFile = Join-Path $repoRoot 'PeakDeskSprite/settings.py'
 

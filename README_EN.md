@@ -59,7 +59,7 @@ English | <a href="README.md">简体中文</a>
 - `docs/`: development, release, and source-structure documentation
 - `scripts/`: release build, package audit, and smoke test scripts
 
-Maintenance docs: [asset development](docs/art_dev.md), [asset and module collection](docs/collection.md), [HatchPet converter](docs/hatchpet_converter.md), [source architecture](docs/source_architecture.md), [source dependency map](docs/source_dependency_map.md), [Windows release checklist](docs/release_checklist.md), [contributing](CONTRIBUTING.md), and [security reporting](SECURITY.md)
+Maintenance docs: [asset development](docs/art_dev.md), [HatchPet converter](docs/hatchpet_converter.md), [source architecture](docs/source_architecture.md), [source dependency map](docs/source_dependency_map.md), [Windows release checklist](docs/release_checklist.md), [contributing](CONTRIBUTING.md), and [security reporting](SECURITY.md)
 
 
 
